@@ -1,4 +1,3 @@
-
 ## DRIA NODE SETUP
 
 ![Dria](assets/img1.png)
@@ -18,7 +17,7 @@ Minimum Requirements:
 
 Run this to setup your Dria Node
 ```
-[ -f setup.sh ] && rm setup.sh; wget https://raw.githubusercontent.com/Rambeboy/dria-node-setup/refs/heads/master/setup.sh && sudo chmod +x setup.sh && ./setup.sh || echo "Error: setup.sh could not be downloaded."
+[ -f DriaSetup.sh ] && rm DriaSetup.sh; wget https://raw.githubusercontent.com/Rambeboy/dria-node-setup/refs/heads/master/DriaSetup.sh && sudo chmod +x DriaSetup.sh && ./DriaSetup.sh || echo "Error: DriaSetup.sh could not be downloaded."
 ```
 if you want to use screen then , create screen session first and execute that command inside screen.
 
@@ -34,7 +33,7 @@ Twitter: https://x.com/driaforall/status/1838250850155667716
 
 Run this to setup your Dria Node
 ```
-[ -f update.sh ] && rm update.sh; wget https://raw.githubusercontent.com/Rambeboy/dria-node-setup/refs/heads/master/update.sh && sudo chmod +x update.sh && ./update.sh || echo "Error: update.sh could not be downloaded."
+[ -f DriaUpdate.sh ] && rm DriaUpdate.sh; wget https://raw.githubusercontent.com/Rambeboy/dria-node-setup/refs/heads/master/DriaUpdate.sh && sudo chmod +x DriaUpdate.sh && ./DriaUpdate.sh || echo "Error: DriaUpdate.sh could not be downloaded."
 ```
 if you use screen then , attach to your screen session first, cancel existing process and execute that command inside screen.
 
