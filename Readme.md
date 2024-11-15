@@ -17,7 +17,7 @@ Minimum Requirements:
 
 Run this to setup your Dria Node
 ```
-[ -f DriaSetup.sh ] && rm DriaSetup.sh; wget https://raw.githubusercontent.com/Rambeboy/dria-node-setup/refs/heads/master/DriaSetup.sh && sudo chmod +x DriaSetup.sh && ./DriaSetup.sh || echo "Error: DriaSetup.sh could not be downloaded."
+[ -f DriaSetup.sh ] && rm DriaSetup.sh; wget https://raw.githubusercontent.com/Rambeboy/dria-node-setup/refs/heads/main/DriaSetup.sh && sudo chmod +x DriaSetup.sh && ./DriaSetup.sh || echo "Error: DriaSetup.sh could not be downloaded."
 ```
 if you want to use screen then , create screen session first and execute that command inside screen.
 
