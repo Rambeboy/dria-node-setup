@@ -7,13 +7,15 @@ Dria Node a decentralized network that allows millions of AI agents to collabora
 
 
 ## SERVER SPESIFICATIONS
+
 ```
 Minimum Requirements:
 4vcpu (better with 8vcpu+)
 8GB RAM (better with 16GB RAM)
 ```
 
-## SETUP
+## SETUP GUIDE
+
 Run this to setup your Dria Node
 ```
 [ -f setup.sh ] && rm setup.sh; wget https://raw.githubusercontent.com/Rambeboy/dria-node-setup/refs/heads/master/setup.sh && sudo chmod +x setup.sh && ./setup.sh || echo "Error: setup.sh could not be downloaded."
