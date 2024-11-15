@@ -33,7 +33,7 @@ Twitter: https://x.com/driaforall/status/1838250850155667716
 
 Run this to setup your Dria Node
 ```
-[ -f DriaUpdate.sh ] && rm DriaUpdate.sh; wget https://raw.githubusercontent.com/Rambeboy/dria-node-setup/refs/heads/master/DriaUpdate.sh && sudo chmod +x DriaUpdate.sh && ./DriaUpdate.sh || echo "Error: DriaUpdate.sh could not be downloaded."
+[ -f DriaUpdate.sh ] && rm DriaUpdate.sh; wget https://raw.githubusercontent.com/Rambeboy/dria-node-setup/refs/heads/main/DriaUpdate.sh && sudo chmod +x DriaUpdate.sh && ./DriaUpdate.sh || echo "Error: DriaUpdate.sh could not be downloaded."
 ```
 if you use screen then , attach to your screen session first, cancel existing process and execute that command inside screen.
 
