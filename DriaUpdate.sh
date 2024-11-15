@@ -29,56 +29,79 @@ setup() {
     cd $NODENAME
 }
 
-dockerSetup(){
-    if ! command -v docker &> /dev/null; then
-        echo "Installing Docker..."
-        for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do
-            sudo apt-get remove -y $pkg
-        done
 
-        sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-        
-        sudo apt update -y && sudo apt install -y docker-ce
-        sudo systemctl start docker
-        sudo systemctl enable docker
-
-        echo "Installing Docker Compose..."
-        sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
-
-        echo "Docker installed successfully."
+backUp(){
+    pwd
+    echo "Back up existing env"
+    
+    if [ -f ".env" ]; then
+        echo ".env file already exists in the current directory, skipping backup."
     else
-        echo "Docker is already installed."
+        if [ -f "dkn-compute-node/.env" ]; then
+            cp dkn-compute-node/.env .
+            echo ".env file backed up from dkn-compute-node."
+        else
+            echo ".env file does not exist in dkn-compute-node, skipping backup."
+        fi
+    fi
+    
+    if [ -d "dkn-compute-node" ]; then
+        rm -rf dkn-compute-node
+        echo "dkn-compute-node directory removed."
+    else
+        echo "dkn-compute-node directory does not exist, skipping removal."
+    fi
+    
+    if [ -f "dkn-compute-node.zip" ]; then
+        rm dkn-compute-node.zip
+        echo "dkn-compute-node.zip file removed."
+    else
+        echo "dkn-compute-node.zip file does not exist, skipping removal."
+    fi
+
+    if ! command -v lsof &> /dev/null; then
+        echo "lsof is not installed. Installing..."
+        sudo apt-get install -y lsof
+        echo "lsof installation complete."
+    else
+        echo "lsof is already installed."
+    fi
+
+    process_name="ollama"
+    process_id=$(lsof -t -i | grep -i "$process_name")
+    if [ -z "$process_id" ]; then
+        echo "$process_name is not running or not using any ports."
+    else
+        echo "$process_name is running with PID: $process_id. Killing the process..."
+        kill -9 "$process_id"
+        
+        if [ $? -eq 0 ]; then
+            echo "$process_name process has been killed."
+        else
+            echo "Failed to kill $process_name process."
+        fi
     fi
 }
 
+
+
 installRequirements(){
-    echo "Installing Package Required by $NODENAME"
-    sleep 2
-
-    if ! command -v unzip &> /dev/null; then
-        echo "Installing Unzip..."
-        sudo apt install unzip -y
-        echo "Unzip Installed"
-    else
-        echo "Unzip is already installed."
-    fi
-
-
-    if ! command -v ollama &> /dev/null; then
-        echo "Installing Ollama..."
-        curl -fsSL https://ollama.com/install.sh | sh
-        echo "Ollama Installed"
-    else
-        echo "Ollama is already installed."
-    fi
-
     echo "Installing $NODENAME Compute Node"
     if [ ! -d "dkn-compute-node" ] && [ ! -f "dkn-compute-node.zip" ]; then
         echo "Downloading dkn-compute-node.zip"
-        curl -L -o dkn-compute-node.zip https://github.com/firstbatchxyz/dkn-compute-launcher/releases/latest/download/dkn-compute-launcher-linux-amd64.zip 
+        ARCH=$(uname -m)
+
+        if [ "$ARCH" == "arm64" ]; then
+            echo "Architecture is arm64, downloading arm64 version."
+            # for aarch64, use arm64
+            curl -L -o dkn-compute-node.zip https://github.com/firstbatchxyz/dkn-compute-launcher/releases/latest/download/dkn-compute-launcher-linux-arm64.zip
+        elif [ "$ARCH" == "x86_64" ]; then
+            echo "Architecture is x86_64, downloading amd64 version."
+            curl -L -o dkn-compute-node.zip https://github.com/firstbatchxyz/dkn-compute-launcher/releases/latest/download/dkn-compute-launcher-linux-amd64.zip
+        else
+            echo "Unknown architecture: $ARCH. Exiting."
+            exit 1
+        fi
         echo "Unzipping dkn-compute-node.zip"
         unzip dkn-compute-node.zip 
         rm dkn-compute-node.zip 
@@ -89,6 +112,8 @@ installRequirements(){
             cd dkn-compute-node
         fi
     fi
+    echo "Copying Back Up Environment."
+    cp -r ../.env .
     echo "$NODENAME Compute Node Installed"
 }
 
@@ -129,7 +154,7 @@ run() {
 
 
 setup
-dockerSetup
+backUp
 installRequirements
 finish
 run
